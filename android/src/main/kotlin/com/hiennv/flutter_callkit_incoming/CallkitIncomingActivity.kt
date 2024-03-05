@@ -184,7 +184,11 @@ class CallkitIncomingActivity : Activity() {
         val avatarUrl = data?.getString(CallkitConstants.EXTRA_CALLKIT_AVATAR, "")
         if (avatarUrl != null && avatarUrl.isNotEmpty()) {
             ivAvatar.visibility = View.VISIBLE
-            val headers = data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as HashMap<String, Any?>
+            val headers = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS, HashMap::class.java) as? HashMap<String, Any?>
+            } else {
+                @Suppress("DEPRECATION") data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as? HashMap<String, Any?>
+            } ?: HashMap<String, Any?>()
             getPicassoInstance(this@CallkitIncomingActivity, headers)
                     .load(avatarUrl)
                     .placeholder(R.drawable.ic_default_avatar)
@@ -222,7 +226,11 @@ class CallkitIncomingActivity : Activity() {
             if (!backgroundUrl.startsWith("http://", true) && !backgroundUrl.startsWith("https://", true)){
                 backgroundUrl = String.format("file:///android_asset/flutter_assets/%s", backgroundUrl)
             }
-            val headers = data?.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as HashMap<String, Any?>
+            val headers = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data?.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS, HashMap::class.java) as? HashMap<String, Any?>
+            } else {
+                @Suppress("DEPRECATION") data?.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as? HashMap<String, Any?>
+            } ?: HashMap<String, Any?>()
             getPicassoInstance(this@CallkitIncomingActivity, headers)
                     .load(backgroundUrl)
                     .placeholder(R.drawable.transparent)

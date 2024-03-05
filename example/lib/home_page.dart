@@ -78,8 +78,7 @@ class HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: LayoutBuilder(
-                builder:
-                    (BuildContext context, BoxConstraints viewportConstraints) {
+                builder: (BuildContext context, BoxConstraints viewportConstraints) {
                   if (textEvents.isNotEmpty) {
                     return SingleChildScrollView(
                       child: ConstrainedBox(
@@ -105,8 +104,7 @@ class HomePageState extends State<HomePage> {
 
   Future<void> requestNotificationPermission() async {
     await FlutterCallkitIncoming.requestNotificationPermission({
-      "rationaleMessagePermission":
-          "Notification permission is required, to show notification.",
+      "rationaleMessagePermission": "Notification permission is required, to show notification.",
       "postNotificationMessageRequired":
           "Notification permission is required, Please allow notification permission from setting."
     });
@@ -138,8 +136,8 @@ class HomePageState extends State<HomePage> {
         appName: 'Callkit',
         avatar: 'https://i.pravatar.cc/100',
         handle: '0123456789',
-        type: 1,
-        duration: 10000,
+        type: 0,
+        duration: 30000,
         textAccept: 'Accept',
         textDecline: 'Decline',
         missedCallNotification: const NotificationParams(
@@ -210,8 +208,7 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> getDevicePushTokenVoIP() async {
-    var devicePushTokenVoIP =
-        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+    var devicePushTokenVoIP = await FlutterCallkitIncoming.getDevicePushTokenVoIP();
     print(devicePushTokenVoIP);
   }
 
@@ -276,8 +273,7 @@ class HomePageState extends State<HomePage> {
 
   //check with https://webhook.site/#!/2748bc41-8599-4093-b8ad-93fd328f1cd2
   Future<void> requestHttp(content) async {
-    get(Uri.parse(
-        'https://webhook.site/2748bc41-8599-4093-b8ad-93fd328f1cd2?data=$content'));
+    get(Uri.parse('https://webhook.site/2748bc41-8599-4093-b8ad-93fd328f1cd2?data=$content'));
   }
 
   void onEvent(CallEvent event) {

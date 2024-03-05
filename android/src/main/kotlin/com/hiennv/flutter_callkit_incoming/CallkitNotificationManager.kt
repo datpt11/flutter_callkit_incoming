@@ -162,8 +162,12 @@ class CallkitNotificationManager(private val context: Context) {
         } else {
             val avatarUrl = data.getString(CallkitConstants.EXTRA_CALLKIT_AVATAR, "")
             if (avatarUrl != null && avatarUrl.isNotEmpty()) {
-                val headers =
-                        data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as HashMap<String, Any?>
+                val headers = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS, HashMap::class.java) as? HashMap<String, Any?>
+            } else {
+                @Suppress("DEPRECATION") data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as? HashMap<String, Any?>
+            } ?: HashMap<String, Any?>()
+
                 getPicassoInstance(context, headers).load(avatarUrl)
                         .into(targetLoadAvatarDefault)
             }
@@ -227,7 +231,11 @@ class CallkitNotificationManager(private val context: Context) {
         val avatarUrl = data.getString(CallkitConstants.EXTRA_CALLKIT_AVATAR, "")
         if (avatarUrl != null && avatarUrl.isNotEmpty()) {
             val headers =
-                    data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as HashMap<String, Any?>
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS, HashMap::class.java) as? HashMap<String, Any?>
+            } else {
+                @Suppress("DEPRECATION") data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as? HashMap<String, Any?>
+            } ?: HashMap<String, Any?>()
             getPicassoInstance(context, headers).load(avatarUrl)
                     .transform(CircleTransform())
                     .into(targetLoadAvatarCustomize)
@@ -328,8 +336,11 @@ class CallkitNotificationManager(private val context: Context) {
             notificationBuilder.setContentText(data.getString(CallkitConstants.EXTRA_CALLKIT_HANDLE, ""))
             val avatarUrl = data.getString(CallkitConstants.EXTRA_CALLKIT_AVATAR, "")
             if (avatarUrl != null && avatarUrl.isNotEmpty()) {
-                val headers =
-                        data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as HashMap<String, Any?>
+                val headers = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS, HashMap::class.java) as? HashMap<String, Any?>
+            } else {
+                @Suppress("DEPRECATION") data.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as? HashMap<String, Any?>
+            } ?: HashMap<String, Any?>()
 
                 getPicassoInstance(context, headers).load(avatarUrl)
                         .into(targetLoadAvatarDefault)
@@ -582,5 +593,3 @@ class CallkitNotificationManager(private val context: Context) {
 
 
 }
-
-
