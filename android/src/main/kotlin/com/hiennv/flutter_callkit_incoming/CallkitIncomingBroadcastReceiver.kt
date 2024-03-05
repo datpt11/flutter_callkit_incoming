@@ -199,6 +199,11 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
                 "callbackText" to data.getString(CallkitConstants.EXTRA_CALLKIT_MISSED_CALL_CALLBACK_TEXT),
                 "isShowCallback" to data.getBoolean(CallkitConstants.EXTRA_CALLKIT_MISSED_CALL_CALLBACK_SHOW),
         )
+        val extra = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            data.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA, HashMap::class.java)
+        } else {
+            @Suppress("DEPRECATION") data.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA) as? HashMap<String, Any>
+        }
         val forwardData = mapOf(
                 "id" to data.getString(CallkitConstants.EXTRA_CALLKIT_ID, ""),
                 "nameCaller" to data.getString(CallkitConstants.EXTRA_CALLKIT_NAME_CALLER, ""),
@@ -208,7 +213,7 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
                 "duration" to data.getLong(CallkitConstants.EXTRA_CALLKIT_DURATION, 0L),
                 "textAccept" to data.getString(CallkitConstants.EXTRA_CALLKIT_TEXT_ACCEPT, ""),
                 "textDecline" to data.getString(CallkitConstants.EXTRA_CALLKIT_TEXT_DECLINE, ""),
-                "extra" to data.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA)!!,
+                "extra" to extra,
                 "missedCallNotification" to notification,
                 "android" to android
         )
