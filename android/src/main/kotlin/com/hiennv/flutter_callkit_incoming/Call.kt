@@ -2,7 +2,7 @@ package com.hiennv.flutter_callkit_incoming
 
 import android.os.Bundle
 import com.fasterxml.jackson.annotation.JsonProperty
-
+import android.os.Build
 @Suppress("UNCHECKED_CAST")
 data class Data(val args: Map<String, Any?>) {
 
@@ -244,9 +244,9 @@ data class Data(val args: Map<String, Any?>) {
                 bundle.getString(CallkitConstants.EXTRA_CALLKIT_MISSED_CALL_CALLBACK_TEXT, "")
 
             data.extra = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                bundle.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA, HashMap::class.java)
+                bundle.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA, HashMap::class.java) as? HashMap<String, Any?>
             } else {
-                @Suppress("DEPRECATION") bundle.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA) as? HashMap<String, Any>
+                @Suppress("DEPRECATION") bundle.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA) as? HashMap<String, Any?>
             } ?: HashMap<String, Any?>()
 
             data.headers =
