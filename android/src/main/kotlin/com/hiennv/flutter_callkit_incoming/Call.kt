@@ -243,8 +243,12 @@ data class Data(val args: Map<String, Any?>) {
             data.missedNotificationCallbackText =
                 bundle.getString(CallkitConstants.EXTRA_CALLKIT_MISSED_CALL_CALLBACK_TEXT, "")
 
-            data.extra =
-                bundle.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA) as HashMap<String, Any?>
+            data.extra = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA, HashMap::class.java)
+            } else {
+                @Suppress("DEPRECATION") bundle.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA) as? HashMap<String, Any>
+            } ?: HashMap<String, Any?>()
+
             data.headers =
                 bundle.getSerializable(CallkitConstants.EXTRA_CALLKIT_HEADERS) as HashMap<String, Any?>
 
