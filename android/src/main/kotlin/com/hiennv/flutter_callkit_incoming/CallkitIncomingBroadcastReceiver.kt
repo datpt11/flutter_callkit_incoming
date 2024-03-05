@@ -203,7 +203,7 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
             data.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA, HashMap::class.java)
         } else {
             @Suppress("DEPRECATION") data.getSerializable(CallkitConstants.EXTRA_CALLKIT_EXTRA) as? HashMap<String, Any>
-        }
+        } ?: HashMap<String, Any?>()
         val forwardData = mapOf(
                 "id" to data.getString(CallkitConstants.EXTRA_CALLKIT_ID, ""),
                 "nameCaller" to data.getString(CallkitConstants.EXTRA_CALLKIT_NAME_CALLER, ""),
