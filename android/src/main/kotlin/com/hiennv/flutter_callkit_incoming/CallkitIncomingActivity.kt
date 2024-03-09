@@ -30,7 +30,6 @@ import android.view.ViewGroup.MarginLayoutParams
 import android.os.PowerManager
 import android.text.TextUtils
 import android.util.Log
-import com.hiennv.flutter_callkit_incoming.telecom.TelecomUtilities
 
 class CallkitIncomingActivity : Activity() {
 

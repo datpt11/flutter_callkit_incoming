@@ -13,9 +13,6 @@ data class Data(val args: Map<String, Any?>) {
     @JsonProperty("id")
     var id: String = (args["id"] as? String) ?: ""
 
-    @JsonProperty("uuid")
-    var uuid: String = (args["id"] as? String) ?: ""
-
     @JsonProperty("nameCaller")
     var nameCaller: String = (args["nameCaller"] as? String) ?: ""
 

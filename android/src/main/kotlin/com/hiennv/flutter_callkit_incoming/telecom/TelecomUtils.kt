@@ -112,7 +112,7 @@ class TelecomUtilities(private val applicationContext : Context) {
 		val extras = Bundle() // has the account handle
 		val callExtras = Bundle() // has the caller's name/number
 
-		val uuid = UUID.fromString(data.uuid)
+		val uuid = UUID.fromString(data.id)
 
 		val number : String = data.handle
 		val uri = Uri.fromParts(PhoneAccount.SCHEME_TEL, number, null)
@@ -128,17 +128,17 @@ class TelecomUtilities(private val applicationContext : Context) {
 
 	@RequiresApi(Build.VERSION_CODES.M)
 	fun endCall(data: Data) {
-		logToFile("[TelecomUtilities] endCall -- UUID: ${data.uuid}")
+		logToFile("[TelecomUtilities] endCall -- UUID: ${data.id}")
 
-		val uuid: String = data.uuid
+		val uuid: String = data.id
 		val connection = TelecomConnectionService.getConnection(uuid)
 		connection?.onDisconnect()
 	}
 
 	@RequiresApi(Build.VERSION_CODES.M)
 	fun holdCall(data: Data) {
-		logToFile("[TelecomUtilities] holdCall -- UUID = ${data.uuid} | hold = ${data.isOnHold}")
-		val connection = TelecomConnectionService.getConnection(data.uuid)
+		logToFile("[TelecomUtilities] holdCall -- UUID = ${data.id} | hold = ${data.isOnHold}")
+		val connection = TelecomConnectionService.getConnection(data.id)
 
 		if (data.isOnHold) connection?.onHold()
 		else connection?.onUnhold()
@@ -146,16 +146,16 @@ class TelecomUtilities(private val applicationContext : Context) {
 
 	@RequiresApi(Build.VERSION_CODES.M)
 	fun unHoldCall(data: Data) {
-		logToFile("[TelecomUtilities] unHoldCall -- UUID = ${data.uuid} ")
-		val connection = TelecomConnectionService.getConnection(data.uuid)
+		logToFile("[TelecomUtilities] unHoldCall -- UUID = ${data.id} ")
+		val connection = TelecomConnectionService.getConnection(data.id)
 		connection?.onUnhold()
 	}
 
 	@RequiresApi(Build.VERSION_CODES.O)
 	fun setAudioRoute(data: Data) {
-		val connection = TelecomConnectionService.getConnection(data.uuid)
+		val connection = TelecomConnectionService.getConnection(data.id)
 
-		logToFile("[TelecomUtilities] setAudioRoute -- UUID = ${data.uuid} | audioRoute = ${data.audioRoute}")
+		logToFile("[TelecomUtilities] setAudioRoute -- UUID = ${data.id} | audioRoute = ${data.audioRoute}")
 
 		val route = jsToAndroidRouteMap[data.audioRoute] ?: return
 		connection?.setAudioRoute(route)
@@ -164,8 +164,8 @@ class TelecomUtilities(private val applicationContext : Context) {
 
 	@RequiresApi(Build.VERSION_CODES.M)
 	fun muteCall(data: Data) {
-		logToFile("[TelecomUtilities] muteCall -- UUID = ${data.uuid} | hold = ${data.isMuted}")
-		val uuid : String = data.uuid
+		logToFile("[TelecomUtilities] muteCall -- UUID = ${data.id} | hold = ${data.isMuted}")
+		val uuid : String = data.id
 		val muted : Boolean = data.isMuted
 		val connection = TelecomConnectionService.getConnection(uuid) ?: return
 
@@ -179,8 +179,7 @@ class TelecomUtilities(private val applicationContext : Context) {
 	}
 
 	fun acceptCall(data: Data) {
-		val uuid : String = data.uuid
-
+		val uuid : String = data.id
 		val connection = TelecomConnectionService.getConnection(uuid)
 		logToFile("[TelecomUtilities] acceptCall -- UUID = $uuid connection exists? ${connection!=null}")
 
