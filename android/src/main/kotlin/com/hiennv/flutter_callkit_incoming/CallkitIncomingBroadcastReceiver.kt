@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import com.hiennv.flutter_callkit_incoming.telecom.TelecomUtilities
 
 class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
 
@@ -113,6 +114,9 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
                     context.stopService(Intent(context, CallkitSoundPlayerService::class.java))
                     callkitNotificationManager.clearIncomingNotification(data, true)
                     addCall(context, Data.fromBundle(data), true)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        TelecomUtilities.telecomUtilitiesSingleton?.endCall(Data.fromBundle(data))
+                    }
                 } catch (error: Exception) {
                     Log.e(TAG, null, error)
                 }
@@ -124,6 +128,9 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
                     context.stopService(Intent(context, CallkitSoundPlayerService::class.java))
                     callkitNotificationManager.clearIncomingNotification(data, false)
                     removeCall(context, Data.fromBundle(data))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        TelecomUtilities.telecomUtilitiesSingleton?.endCall(Data.fromBundle(data))
+                    }
                 } catch (error: Exception) {
                     Log.e(TAG, null, error)
                 }

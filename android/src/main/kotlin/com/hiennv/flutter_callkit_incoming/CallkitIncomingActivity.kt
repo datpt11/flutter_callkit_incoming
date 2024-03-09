@@ -293,9 +293,6 @@ class CallkitIncomingActivity : Activity() {
 
 
     private fun onAcceptClick() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            TelecomUtilities?.telecomUtilitiesSingleton?.endAllActiveCalls()
-        };
         val data = intent.extras?.getBundle(CallkitConstants.EXTRA_CALLKIT_INCOMING_DATA)
         val acceptIntent = TransparentActivity.getIntent(this, CallkitConstants.ACTION_CALL_ACCEPT, data)
         startActivity(acceptIntent)
@@ -312,9 +309,6 @@ class CallkitIncomingActivity : Activity() {
     }
 
     private fun onDeclineClick() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            TelecomUtilities?.telecomUtilitiesSingleton?.endAllActiveCalls()
-        };
         val data = intent.extras?.getBundle(CallkitConstants.EXTRA_CALLKIT_INCOMING_DATA)
         val intent = CallkitIncomingBroadcastReceiver.getIntentDecline(this@CallkitIncomingActivity, data)
         sendBroadcast(intent)
