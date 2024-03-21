@@ -156,6 +156,7 @@ class HomePageState extends State<HomePage> {
           backgroundUrl: 'assets/test.png',
           actionColor: '#4CAF50',
           textColor: '#ffffff',
+          isShowCallID: true,
           incomingCallNotificationChannelName: 'Incoming Call',
           missedCallNotificationChannelName: 'Missed Call',
         ),
