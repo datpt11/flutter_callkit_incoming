@@ -1,16 +1,23 @@
 package com.hiennv.flutter_callkit_incoming
 
+//import com.hiennv.flutter_callkit_incoming.telecom.TelecomUtilities
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityManager
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.WindowManager
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.startActivity
 import com.hiennv.flutter_callkit_incoming.Utils.Companion.reapCollection
-//import com.hiennv.flutter_callkit_incoming.telecom.TelecomUtilities
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -343,6 +350,52 @@ class FlutterCallkitIncomingPlugin : FlutterPlugin, MethodCallHandler, ActivityA
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                        telecomUtilities.setAudioRoute(data)
 //                    }
+                }
+                "showWhenLocked" -> {
+                    var show = call.argument<Boolean>("show")
+                    val keyguardManager = context?.getSystemService(FlutterFragmentActivity.KEYGUARD_SERVICE) as KeyguardManager
+                    val isPhoneLocked = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        keyguardManager.isDeviceLocked
+                    } else {
+                        keyguardManager.inKeyguardRestrictedInputMode();
+                    };
+
+                    if (isPhoneLocked) {
+                        if (show == true) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+//                                Handler(Looper.getMainLooper()).postDelayed({
+                                    activity?.setTurnScreenOn(true)
+                                    activity?.setShowWhenLocked(true)
+                                    val intent = Intent(context, activity!!.javaClass)
+                                    activity?.startActivity(intent)
+//                                }, 1000)
+                            } else {
+                                activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                                activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+                                activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+                                activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+                            }
+                        } else {
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    activity?.setTurnScreenOn(false)
+                                    activity?.setShowWhenLocked(false)
+                                    activity?.finish()
+                                    activity?.moveTaskToBack(true)
+                                }, 1000)
+                            } else {
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+                                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+                                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+                                    activity?.moveTaskToBack(true)
+                                }, 1000)
+                            }
+                        }
+                    }
+                    result.success(true);
                 }
             }
         } catch (error: Exception) {
